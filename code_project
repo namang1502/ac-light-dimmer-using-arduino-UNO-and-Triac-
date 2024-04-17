@@ -1,0 +1,30 @@
+#define triggerPin 3
+#define zeroCrossingPin 2
+#define PotPin A0
+int dim_val=0;
+void setup()
+{
+ Serial.begin(9600);
+ pinMode(PotPin,INPUT);
+ pinMode(triggerPin, OUTPUT);
+ pinMode(zeroCrossingPin,INPUT);
+ attachInterrupt(digitalPinToInterrupt(zeroCrossingPin), zero_cross, CHANGE);
+}
+void zero_cross()
+{
+ int dimming_time = (dim_val);
+ delayMicroseconds(dimming_time);
+ digitalWrite(triggerPin, HIGH);
+ delayMicroseconds(10);
+ digitalWrite(triggerPin, LOW);
+}
+void loop()
+{
+ int data=analogRead(PotPin);
+ int data1 = map(data, 0, 1023,0,24);
+ dim_val=data1;
+ Serial.print("potdata: ");
+ Serial.println(data);
+ Serial.print(" ");
+ Serial.println(data1);
+}
